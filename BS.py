@@ -216,33 +216,42 @@ def generate_central_log():
                     log_file.write(f"Account: {account_id}, Balance: {balance}\n")
     print(f"Central log generated at: {central_log_path}")
 
-def user_operations(user_id, all_users):
+def user_operations(user_id, operation, target_account, amount):
     """Performs operations for a user: transfers, deposits, withdrawals, and view balance."""
     # Number of operations per user
-    num_operations = 10
+    # num_operations = 10
 
-    for _ in range(num_operations):
-        operation = random.choice(['transfer', 'deposit', 'withdraw', 'view_balance'])
+    # for _ in range(num_operations):
+    #     operation = random.choice(['transfer', 'deposit', 'withdraw', 'view_balance'])
 
-        if operation == 'transfer':
-            # Select a random target account excluding self
-            target_account = random.choice([user for user in all_users if user != user_id])
-            amount = random.randint(10, 1000)  # Random transfer amount
-            transfer(user_id, target_account, amount)
+    if operation == 'transfer':
+        # Select a random target account excluding self
+        # target_account = random.choice([user for user in all_users if user != user_id])
+        # amount = random.randint(10, 1000)  # Random transfer amount
+        # view_balance(user_id)
+        transfer(user_id, target_account, amount)
+        view_balance(user_id)
+        
 
-        elif operation == 'deposit':
-            amount = random.randint(10, 500)  # Random deposit amount
-            deposit(user_id, amount)
+    elif operation == 'deposit':
+        # amount = random.randint(10, 500)  # Random deposit amount
+        # view_balance(user_id)
+        deposit(user_id, amount)
+        view_balance(user_id)
+        
 
-        elif operation == 'withdraw':
-            amount = random.randint(10, 500)  # Random withdrawal amount
-            withdraw(user_id, amount)
+    elif operation == 'withdraw':
+        # amount = random.randint(10, 500)  # Random withdrawal amount
+        # view_balance(user_id)
+        withdraw(user_id, amount)
+        view_balance(user_id)
+        
 
-        elif operation == 'view_balance':
-            view_balance(user_id)
+    elif operation == 'view_balance':
+        view_balance(user_id)
 
         # Random sleep to simulate real-world operations
-        time.sleep(random.uniform(0.1, 0.5))
+    time.sleep(random.uniform(0.1, 0.5))
 
 def main():
     # List of all user IDs
@@ -259,12 +268,32 @@ def main():
 
     # Start threads for each user
     threads = []
-    for user_id in user_ids:
-         thread = threading.Thread(target=user_operations, args=(user_id, user_ids))
-         threads.append(thread)
-         thread.start()
+    # for user_id in user_ids:
+    #     thread = threading.Thread(target=user_operations, args=(user_id, user_ids))
+    #     threads.append(thread)
+    #     thread.start()
 
-  
+    thread = threading.Thread(target=user_operations, args=(user_ids[0], "transfer", user_ids[1],500))
+    threads.append(thread)
+    thread.start()
+    
+    
+    
+    # thread = threading.Thread(target=user_operations, args=(user_ids[0], "view_balance", user_ids[1],500))
+    # threads.append(thread)
+    # thread.start()
+    
+    thread = threading.Thread(target=user_operations, args=(user_ids[1], "transfer", user_ids[0],300))
+    threads.append(thread)
+    thread.start()
+    
+    
+
+    
+
+    # thread = threading.Thread(target=user_operations, args=(user_ids[2],"transfer", user_ids[0], 200))
+    # threads.append(thread)
+    # thread.start()   
 
     # Wait for all threads to complete
     for thread in threads:
